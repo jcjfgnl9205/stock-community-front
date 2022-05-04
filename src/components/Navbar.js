@@ -17,12 +17,12 @@ const navLinks = [
   { title: `about us`, path: `/about-us` },
   { title: `product`, path: `/product` },
   { title: `blog`, path: `/blog` },
-  { title: `contact`, path: `/contact` },
-  { title: `faq`, path: `/faq` },
+  { title: `CONTACT`, path: `/contact` },
+  { title: `FAQ`, path: `/faq` },
 ];
 const navLinks2 = [
-  { title: `login`, path: `/login` },
-  { title: `signup`, path: `/signup` },
+  { title: `LOGIN`, path: `/login` },
+  { title: `SIGNUP`, path: `/signup` },
 ];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 

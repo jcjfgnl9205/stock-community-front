@@ -12,6 +12,9 @@ import Login from './pages/auth/Login';
 import Signup from './pages/auth/Signup';
 
 import Main from './pages/common/Main';
+import Contact from './pages/common/Contact';
+import Faq from './pages/common/Faq';
+
 import NotFound from './pages/common/NotFound';
 
 function App() {
@@ -23,6 +26,9 @@ function App() {
         <Route path="/" element={ <Main /> } />
         <Route path="/login" element={ <Login /> } />
         <Route path="/signup" element={ <Signup /> } />
+
+        <Route path="/contact" element={ <Contact /> } />
+        <Route path="/faq" element={ <Faq /> } />
 
         <Route path="*" element={ <NotFound /> } />
       </Routes>
