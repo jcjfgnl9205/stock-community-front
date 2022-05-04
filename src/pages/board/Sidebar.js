@@ -1,20 +1,22 @@
 import React from 'react';
-import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 
-const MainNews = () => {
+const Sidebar = () => {
+
   return (
-    <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography variant="h6" component="span">Main News</Typography>
-        <Link href="#" variant="body2">More</Link>
-      </Box>
-      <nav aria-label="main mailbox folders">
+    <Grid
+      item
+      xs={12}
+      md={4}
+    >
+      <Paper sx={{ p: { xs: 2, md: 3 } }}>
+        <Typography variant="h6">Title</Typography>
         <List>
           <ListItem disablePadding>
             <ListItemButton>
@@ -46,9 +48,9 @@ const MainNews = () => {
             </ListItemButton>
           </ListItem>
         </List>
-      </nav>
-    </Box>
+      </Paper>
+    </Grid>
   );
 }
 
-export default React.memo(MainNews);
+export default React.memo(Sidebar);

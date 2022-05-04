@@ -6,6 +6,7 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
 
 
 const Faq = () => {
@@ -27,50 +28,52 @@ const Faq = () => {
 
         <Divider />
 
-        <Box component="form" sx={{ mt: 4 }}>
-          <Grid container spacing={5}>
-            <Grid item xs={12} md={6}>
-              <TextField
-                type="text"
-                id="username"
-                label="username"
-                fullWidth
-                variant="standard"
-              />
+        <Paper sx={{ mt: 2 , p: { xs: 2, md: 3 } }}>
+          <Box component="form" >
+            <Grid container spacing={5}>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  type="text"
+                  id="username"
+                  label="username"
+                  fullWidth
+                  variant="standard"
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  type="email"
+                  id="email"
+                  label="email"
+                  fullWidth
+                  variant="standard"
+                />
+              </Grid>
+              <Grid item xs={12} md={12}>
+                <TextField 
+                  type="text"
+                  id="subject"
+                  label="Subject"
+                  fullWidth
+                  variant="standard"
+                />
+              </Grid>
+              <Grid item xs={12} md={12}>
+                <TextField
+                  id="standard-multiline-static"
+                  label="Message"
+                  multiline
+                  fullWidth
+                  rows={6}
+                  variant="standard"
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                type="email"
-                id="email"
-                label="email"
-                fullWidth
-                variant="standard"
-              />
-            </Grid>
-            <Grid item xs={12} md={12}>
-              <TextField 
-                type="text"
-                id="subject"
-                label="Subject"
-                fullWidth
-                variant="standard"
-              />
-            </Grid>
-            <Grid item xs={12} md={12}>
-              <TextField
-                id="standard-multiline-static"
-                label="Message"
-                multiline
-                fullWidth
-                rows={6}
-                variant="standard"
-              />
-            </Grid>
-          </Grid>
 
-          {/* Submit Button */}
-          <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>Submit</Button>
-        </Box>
+            {/* Submit Button */}
+            <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>Submit</Button>
+          </Box>
+        </Paper>
       </Box>
     </Container>
   );

@@ -14,9 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Link from '@mui/material/Link';
 
 const navLinks = [
-  { title: `about us`, path: `/about-us` },
-  { title: `product`, path: `/product` },
-  { title: `blog`, path: `/blog` },
+  { title: `NOTICE`, path: `/notices` },
   { title: `CONTACT`, path: `/contact` },
   { title: `FAQ`, path: `/faq` },
 ];
