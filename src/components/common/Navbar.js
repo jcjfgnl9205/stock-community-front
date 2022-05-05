@@ -97,7 +97,7 @@ const Navbar = () => {
         </Toolbar>
       </Container>
       
-      <LoginModal open={loginModalOpen} loginClickOpen={loginClickOpen} loginClickClose={loginClickClose}/>
+      <LoginModal open={loginModalOpen} handleClose={loginClickClose}/>
     </AppBar>
   );
 }
