@@ -1,0 +1,43 @@
+# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
+# For more information see: https://help.github.com/actions/language-and-framework-guides/publishing-nodejs-packages
+
+name: aws-frontend-deploy
+
+on:
+  push:
+    branches:
+      - main # main branchにpushする時、 CI/CDを行う
+
+jobs: 
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code. # Repo checkout
+        uses: actions/checkout@v2
+      - name: Check Node v # Node v check
+        run: node -v
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+      - name: Build # React Build
+        run: yarn build
+      - name: zip create # zip fileを作成する
+        run: zip -qq -r ./react-build.zip .
+        shell: bash
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Upload to S3 # Upload build file to S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          aws s3 cp --region ap-northeast-1 ./react-build.zip s3://park-bucket-app/frontend/react-build.zip
+      - name: Deploy # Deploy to EC2
+        run: aws deploy create-deployment
+          --application-name app
+          --deployment-config-name CodeDeployDefault.AllAtOnce
+          --deployment-group-name app-group
+          --s3-location bucket=park-bucket-app,key=frontend/react-build.zip,bundleType=zip
