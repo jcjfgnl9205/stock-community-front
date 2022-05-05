@@ -57,11 +57,11 @@ const LoginModal = (props) => {
   return (
     <div>
       <BootstrapDialog
-        onClose={props.loginClickClose}
+        onClose={props.handleClose}
         aria-labelledby="customized-dialog-title"
         open={props.open}
       >
-        <BootstrapDialogTitle id="customized-dialog-title" onClose={props.loginClickClose}>
+        <BootstrapDialogTitle id="customized-dialog-title" onClose={props.handleClose}>
           Login
         </BootstrapDialogTitle>
 

@@ -10,7 +10,9 @@ import TableRow from '@mui/material/TableRow';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
+import Button from '@mui/material/Button';
 
+import CreateForm from '../../components/board/CreateForm';
 
 const columns = [
   { 
@@ -91,6 +93,14 @@ const rows = [
 const Notices = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [ createFormModal, setCreateFormModal ] = useState(false);
+  
+  const createFormModalOpen = () => {
+    setCreateFormModal(true);
+  };
+  const createFormModalClose = () => {
+    setCreateFormModal(false);
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -101,9 +111,15 @@ const Notices = () => {
     setPage(0);
   };
 
+  const onCreateSubmit = () => {
+    console.log("create")
+  }
+
   return (
     <Container component="main">
       <Typography component="h1" gutterBottom variant="h4" sx={{ marginTop: 10 }}>NOTICE</Typography>
+      <Button type="button" variant="outlined" sx={{ mb: 1}} size="small" onClick={ createFormModalOpen }>CREATE</Button>
+
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
         <TableContainer>
           <Table stickyHeader aria-label="sticky table">
@@ -154,6 +170,14 @@ const Notices = () => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+
+      <CreateForm
+        title="NOTICE CREATE"
+        open={createFormModal}
+        handleClose={createFormModalClose}
+        onSubmit={onCreateSubmit}
+      />
+
     </Container>
   );
 }

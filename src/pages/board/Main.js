@@ -52,7 +52,7 @@ const Main = ({ post }) => {
         </Stack>
       </Paper>
       
-      <LoginModal open={loginModalOpen} loginClickOpen={loginClickOpen} loginClickClose={loginClickClose}/>
+      <LoginModal open={loginModalOpen} handleClose={loginClickClose}/>
     </Grid>
     
   );
