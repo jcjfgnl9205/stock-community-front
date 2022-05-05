@@ -7,9 +7,7 @@ import {
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 
-import Navbar from './components/Navbar';
-
-import Login from './pages/auth/Login';
+import Navbar from './components/common/Navbar';
 import Signup from './pages/auth/Signup';
 
 import Main from './pages/common/Main';
@@ -33,7 +31,6 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={ <Main /> } />
-          <Route path="/login" element={ <Login /> } />
           <Route path="/signup" element={ <Signup /> } />
 
 

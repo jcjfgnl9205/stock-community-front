@@ -12,23 +12,30 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 
 import Link from '@mui/material/Link';
+import LoginModal from '../auth/LoginModal';
 
 const navLinks = [
   { title: `NOTICE`, path: `/notices` },
   { title: `CONTACT`, path: `/contact` },
   { title: `FAQ`, path: `/faq` },
 ];
-const navLinks2 = [
-  { title: `LOGIN`, path: `/login` },
-  { title: `SIGNUP`, path: `/signup` },
-];
+
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 
 const Navbar = () => {
 
   const [ anchorElUser, setAnchorElUser ] = useState(null);
+  const [ loginModalOpen, setLoginModalOpen ] = useState(false);
+  
+  const loginClickOpen = () => {
+    setLoginModalOpen(true);
+  };
+  const loginClickClose = () => {
+    setLoginModalOpen(false);
+  };
 
+  
   const handleOpenUserMenu = e => {
     setAnchorElUser(e.currentTarget);
   };
@@ -54,9 +61,8 @@ const Navbar = () => {
 
           {/* Login, Signup Link */}
           <Box sx={{ display: { md: 'flex' } }}>
-            {navLinks2.map(({ title, path }) => (
-              <Link href={ path } key={ title } color="inherit" underline="none" sx={{ mx: 2, color: 'white', display: 'block' }}>{ title }</Link>
-            ))}
+            <Link href="#" color="inherit" underline="none" sx={{ mx: 2, color: 'white', display: 'block' }} onClick={ loginClickOpen } >LOGIN</Link>
+            <Link href="/signup" color="inherit" underline="none" sx={{ mx: 2, color: 'white', display: 'block' }} >SIGN UP</Link>
           </Box>
           {/* user menu */}
           <Box sx={{ flexGrow: 0 }}>
@@ -90,6 +96,8 @@ const Navbar = () => {
           </Box>
         </Toolbar>
       </Container>
+      
+      <LoginModal open={loginModalOpen} loginClickOpen={loginClickOpen} loginClickClose={loginClickClose}/>
     </AppBar>
   );
 }
