@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
@@ -13,7 +13,13 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import TextField from '@mui/material/TextField';
 
+import { UserContext } from '../../context/UserContext';
+import LoginModal from '../auth/LoginModal';
+
+
 const Comments = () => {
+
+  const { loginModal, loginModalOpen, loginModalClose } = useContext(UserContext);
 
   return (
     <Grid
@@ -133,6 +139,12 @@ const Comments = () => {
           />
           <Button type="submit" variant="contained" sx={{ mt:1 }} >submit</Button>
         </Box>
+        <Box onClick={ loginModalOpen }>
+          <Typography variant="h6" align="center" gutterBottom>Write comments</Typography>
+          <Typography variant="body2" align="center" gutterBottom>Login required</Typography>
+        </Box>
+
+        <LoginModal open={ loginModal } handleClose={ loginModalClose }/>
       </Paper>
     </Grid>
   );

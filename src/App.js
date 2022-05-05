@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   BrowserRouter as Router,
   Routes,
   Route,
+  Navigate,
   } from "react-router-dom";
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
+import { UserContext } from './context/UserContext';
 
 import Navbar from './components/common/Navbar';
 import Signup from './pages/auth/Signup';
@@ -19,6 +21,8 @@ import Faq from './pages/common/Faq';
 import NotFound from './pages/common/NotFound';
 
 function App() {
+  const { user } = useContext(UserContext);
+
   return (
     <Box
       sx={{
@@ -31,7 +35,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={ <Main /> } />
-          <Route path="/signup" element={ <Signup /> } />
+          <Route path="/signup" element={ user.auth ? <Navigate to="/" replace /> : <Signup /> } />
 
 
           <Route path="/notices" element={ <Notices /> } />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
@@ -9,18 +9,13 @@ import Paper from '@mui/material/Paper';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 
-import LoginModal from '../../components/auth/LoginModal';
+import { UserContext } from '../../context/UserContext';
+import LoginModal from '../auth/LoginModal';
 
 const Main = ({ post }) => {
 
-  const [ loginModalOpen, setLoginModalOpen ] = useState(false);
-  
-  const loginClickOpen = () => {
-    setLoginModalOpen(true);
-  };
-  const loginClickClose = () => {
-    setLoginModalOpen(false);
-  };
+  // Loginしていない場合、Login Modalを開く
+  const { loginModal, loginModalOpen, loginModalClose } = useContext(UserContext);
 
   return (
     <Grid
@@ -47,12 +42,12 @@ const Main = ({ post }) => {
         </Box>
 
         <Stack direction="row" spacing={2} sx={{ mb: 6, justifyContent: 'center' }}>
-          <Button variant="outlined" size="large" color="error" startIcon={<ThumbUpIcon />} onClick={loginClickOpen} >0</Button>
-          <Button variant="outlined" size="large" color="info" startIcon={<ThumbDownAltIcon />} onClick={loginClickOpen} >0</Button>
+          <Button variant="outlined" size="large" color="error" startIcon={<ThumbUpIcon />} onClick={ loginModalOpen } >0</Button>
+          <Button variant="outlined" size="large" color="info" startIcon={<ThumbDownAltIcon />} onClick={ loginModalOpen } >0</Button>
         </Stack>
       </Paper>
       
-      <LoginModal open={loginModalOpen} handleClose={loginClickClose}/>
+      <LoginModal open={ loginModal } handleClose={ loginModalClose }/>
     </Grid>
     
   );

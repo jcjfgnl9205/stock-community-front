@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
@@ -13,6 +13,7 @@ import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
+import { UserContext } from '../../context/UserContext';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -48,9 +49,11 @@ const BootstrapDialogTitle = (props) => {
 
 const LoginModal = (props) => {
 
+  const { login } = useContext(UserContext);
+
   const loginSubmit = e => {
     e.preventDefault();
-    console.log("login");
+    login("test")
   };
 
 
