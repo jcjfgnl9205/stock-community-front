@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
@@ -12,6 +12,8 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 
 import { UserContext } from '../../context/UserContext';
 
@@ -51,9 +53,23 @@ const LoginModal = (props) => {
 
   const { login } = useContext(UserContext);
 
-  const loginSubmit = e => {
+  const [ user, setUser ] = useState({username: "", password: ""});
+  const [ errorMsg, setErrorMsg ] = useState('');
+
+  const onChange = e => {
+    const { value, name } = e.target;
+    setUser({
+      ...user,
+      [name]: value
+    });
+  }
+
+  const loginSubmit = async e => {
     e.preventDefault();
-    login("test")
+    const data = await login(user);
+    if (!data.access_token) {
+      setErrorMsg(data)
+    }
   };
 
 
@@ -68,7 +84,7 @@ const LoginModal = (props) => {
           Login
         </BootstrapDialogTitle>
 
-        <DialogContent dividers sx={{ maxWidth: 420 }}>
+        <DialogContent dividers sx={{ maxWidth: 440 }}>
           <Box
             sx={{
               display: 'flex',
@@ -85,6 +101,8 @@ const LoginModal = (props) => {
                 label="username"
                 name="username"
                 autoFocus
+                inputProps={{ minLength: 8, maxLength : 20 }}
+                onChange={ onChange }
               />
               <TextField
                 margin="normal"
@@ -94,11 +112,22 @@ const LoginModal = (props) => {
                 label="Password"
                 type="password"
                 id="password"
+                inputProps={{ minLength: 8, maxLength : 20 }}
+                onChange={ onChange }
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
+
+              {/* Login Failed */}
+              {
+                errorMsg
+                ? <Stack sx={{ width: '100%' }} >
+                    <Alert severity="error">{ errorMsg }</Alert>
+                  </Stack>
+                : null
+              }
 
               {/* Login Button */}
               <Button

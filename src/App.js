@@ -21,7 +21,7 @@ import Faq from './pages/common/Faq';
 import NotFound from './pages/common/NotFound';
 
 function App() {
-  const { user } = useContext(UserContext);
+  const { token } = useContext(UserContext);
 
   return (
     <Box
@@ -35,7 +35,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={ <Main /> } />
-          <Route path="/signup" element={ user.auth ? <Navigate to="/" replace /> : <Signup /> } />
+          <Route path="/signup" element={ token ? <Navigate to="/" replace /> : <Signup /> } />
 
 
           <Route path="/notices" element={ <Notices /> } />

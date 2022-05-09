@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -27,8 +28,7 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const Navbar = () => {
 
-  // Loginしていない場合、Login Modalを開く
-  const { loginModal, loginModalOpen, loginModalClose } = useContext(UserContext);
+  const { token, loginModal, loginModalOpen, loginModalClose } = useContext(UserContext);
   const { user, logout } = useContext(UserContext);
   
   const [ anchorElUser, setAnchorElUser ] = useState(null);
@@ -38,27 +38,27 @@ const Navbar = () => {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography variant="h6" noWrap component="div" sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }} >
-            <Link href="/" underline="none" sx={{ mx: 2, color: 'white', display: 'block' }}>LOGO</Link>
+            <Link to="/" component={ RouterLink } underline="none" color="inherit" sx={{ mx: 2, display: 'block' }}>LOGO</Link>
           </Typography>
 
           {/* Navbar Link */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {navLinks.map(({ title, path }) => (
-              <Link href={ path } key={ title } color="inherit" underline="none" sx={{ mx: 2, color: 'white', display: 'block' }}>{ title }</Link>
+              <Link key={ title } to={ path } component={ RouterLink } underline="none" color="inherit" sx={{ mx: 2, display: 'block' }}>{ title }</Link>
             ))}
           </Box>
 
           {/* Login, Signup Link */}
           {
-            !user.auth
+            !token
             ? <Box sx={{ display: { md: 'flex' } }}>
-                <Link href="#" color="inherit" underline="none" sx={{ mx: 2, color: 'white', display: 'block' }} onClick={ loginModalOpen } >LOGIN</Link>
-                <Link href="/signup" color="inherit" underline="none" sx={{ mx: 2, color: 'white', display: 'block' }} >SIGN UP</Link>
+                <Link to="#" component={ RouterLink } onClick={ loginModalOpen } underline="none" color="inherit" sx={{ mx: 2, display: 'block' }}>LOGIN</Link>
+                <Link to="/signup" component={ RouterLink } underline="none" color="inherit">SIGN UP</Link>
               </Box>
             : <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                   <IconButton onClick={ (e) => setAnchorElUser(e.currentTarget) } sx={{ p: 0 }}>
-                    <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                    <Avatar alt={ user.username } src="/static/images/avatar/2.jpg" />
                   </IconButton>
                 </Tooltip>
                 <Menu
@@ -81,7 +81,7 @@ const Navbar = () => {
                     <MenuItem key={ setting } onClick={ () => setAnchorElUser(null) } >
                       {
                         setting === 'Logout'
-                        ? <Link href="#" color="inherit" underline="none" sx={{ mx: 2, color: 'white', display: 'block' }} onClick={ logout } >{ setting }</Link>
+                        ? <Link to="#" component={ RouterLink } onClick={ logout } underline="none" color="inherit" sx={{ mx: 2, display: 'block' }} >{ setting }</Link>
                         : <Typography textAlign="center">{ setting }</Typography>
                       }
                     </MenuItem>
