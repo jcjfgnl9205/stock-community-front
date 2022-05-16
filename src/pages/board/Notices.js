@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { useLocation, Link as RouterLink } from "react-router-dom";
+
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -12,94 +14,59 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
 
+import { UserContext } from '../../context/UserContext';
+import * as NoticeAPI from '../../lib/NoticeAPI';
+import * as config from '../../config';
+
 import CreateForm from '../../components/board/CreateForm';
 
 const columns = [
-  { 
-    id: 'no',
-    label: 'No',
-    align: 'center',
-    minWidth: 30
-  },
-  { 
-    id: 'title',
-    label: 'Title', 
-    align: 'left',
-    minWidth: 300 
-  },
-  {
-    id: 'writer',
-    label: 'Writer',
-    minWidth: 100,
-    align: 'center',
-  },
-  {
-    id: 'like',
-    label: 'Like',
-    minWidth: 100,
-    align: 'center',
-  },
-  {
-    id: 'date',
-    label: 'Date',
-    minWidth: 100,
-    align: 'center',
-  },
-  {
-    id: 'views',
-    label: 'Views',
-    minWidth: 50,
-    align: 'center',
-  },
+  { id: 'no', label: 'No', align: 'center', minWidth: 30 },
+  { id: 'title', label: 'Title',  align: 'left', minWidth: 300 },
+  { id: 'writer', label: 'Writer', align: 'center', minWidth: 100 },
+  { id: 'like', label: 'Like', align: 'center', minWidth: 100 },
+  { id: 'date', label: 'Date', align: 'center', minWidth: 100 },
+  { id: 'views', label: 'Views', align: 'center', minWidth: 50 },
 ];
 
-const formatDate = date => {
-  var d = new Date(date),
-      month = '' + (d.getMonth() + 1),
-      day = '' + d.getDate(),
-      year = d.getFullYear();
-
-  if (month.length < 2) 
-      month = '0' + month;
-  if (day.length < 2) 
-      day = '0' + day;
-
-  return [year, month, day].join('-');
-}
-
 const createData = (no, title, writer, like, _date, views) => {
-  const date = formatDate(_date);
+  const date = config.formatDate(_date);
   return { no, title, writer, like, date, views };
 }
 
-const rows = [
-  createData('1', 'Title1', "admin1234", 1, new Date(), 23),
-  createData('2', 'Title2', "admin1234", 2, new Date(), 23),
-  createData('3', 'Title3', "admin1234", 3, new Date(), 23),
-  createData('4', 'Title4', "admin1234", 4, new Date(), 23),
-  createData('5', 'Title5', "admin1234", 5, new Date(), 23),
-  createData('6', 'Title6', "admin1234", 6, new Date(), 23),
-  createData('7', 'Title7', "admin1234", 6, new Date(), 23),
-  createData('8', 'Title8', "admin1234", 10, new Date(), 1),
-  createData('9', 'Title9', "admin1234", 12, new Date(), 1),
-  createData('10', 'Title10', "admin1234", 13, new Date(), 2),
-  createData('11', 'Title11', "admin1234", 14, new Date(), 2),
-  createData('12', 'Title12', "admin1234", 55, new Date(), 2),
-  createData('13', 'Title13', "admin1234", 55, new Date(), 2),
-  createData('14', 'Title14', "admin1234", 2341, new Date(), 3),
-  createData('15', 'Title15', "admin1234", 23, new Date(), 3),
-];
-
 const Notices = () => {
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const path = useLocation(); // 現在path
+  const { token } = useContext(UserContext);
+
+  const [ notices, setNotices ] = useState([]);
+  const [ page, setPage ] = useState(0);
+  const [ rowsPerPage, setRowsPerPage ] = useState(10);
   const [ createFormModal, setCreateFormModal ] = useState(false);
-  
+  const [ errorMsg, setErrorMsg ] = useState('');
+
+  useEffect(() => {
+    // Notice List取得
+    const notices = async () => {
+      const response = await NoticeAPI.get_notices(path.pathname);
+      if (response.status === 200) {
+        const data = await response.json();
+        const newData = data.items?.map(notice => {
+          return createData(notice.id, notice.title, notice.writer, notice.views, notice.created_at, notice.views)
+        });
+        setNotices(newData)
+      } else {
+        console.log("error")
+      }
+    }
+    notices();
+  }, [path, createFormModal])
+
   const createFormModalOpen = () => {
     setCreateFormModal(true);
   };
   const createFormModalClose = () => {
     setCreateFormModal(false);
+    setErrorMsg('');
   };
 
   const handleChangePage = (event, newPage) => {
@@ -111,14 +78,15 @@ const Notices = () => {
     setPage(0);
   };
 
-  const onCreateSubmit = () => {
-    console.log("create")
-  }
-
   return (
     <Container component="main">
       <Typography component="h1" gutterBottom variant="h4" sx={{ marginTop: 10 }}>NOTICE</Typography>
-      <Button type="button" variant="outlined" sx={{ mb: 1}} size="small" onClick={ createFormModalOpen }>CREATE</Button>
+      {/* 登録ボタンはログインしているユーザーのみ */}
+      {
+        token
+        ? <Button type="button" variant="outlined" sx={{ mb: 1}} size="small" onClick={ createFormModalOpen }>CREATE</Button>
+        : null
+      }
 
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
         <TableContainer>
@@ -137,18 +105,18 @@ const Notices = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows
+              {notices
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map( row => {
+                .map( notice => {
                   return (
-                    <TableRow hover role="checkbox" tabIndex={ -1 } key={ row.no }>
+                    <TableRow hover role="checkbox" tabIndex={ -1 } key={ notice.no }>
                       {columns.map( column => {
-                        const value = row[column.id];
+                        const value = notice[column.id];
                         return (
                           <TableCell key={ column.id } align={ column.align }>
                             { 
                               column.id === 'title'
-                              ? <Link href={ `notices/${row.no}` } underline="hover" color="inherit">{ value }</Link>
+                              ? <Link to={ `${notice.no}` } component={ RouterLink } underline="hover" color="inherit">{ value }</Link>
                               : value
                             }
                           </TableCell>
@@ -163,7 +131,7 @@ const Notices = () => {
         <TablePagination
           rowsPerPageOptions={[10, 25, 100]}
           component="div"
-          count={rows.length}
+          count={notices.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -175,7 +143,9 @@ const Notices = () => {
         title="NOTICE CREATE"
         open={createFormModal}
         handleClose={createFormModalClose}
-        onSubmit={onCreateSubmit}
+        errorMsg={errorMsg}
+        setErrorMsg={setErrorMsg}
+        token={token}
       />
 
     </Container>

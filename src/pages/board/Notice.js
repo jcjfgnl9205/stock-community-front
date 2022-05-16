@@ -1,5 +1,7 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { useLocation } from "react-router-dom";
+
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
@@ -10,10 +12,36 @@ import Comments from '../../components/board/Comments';
 import UpdateForm from '../../components/board/CreateForm';
 import DeleteConfirm from '../../components/common/Modal1';
 
-const Notice = () => {
+import { UserContext } from '../../context/UserContext';
+import * as NoticeAPI from '../../lib/NoticeAPI';
 
+
+const Notice = () => {
+  const path = useLocation(); // 現在path
+  const { token, user, loginModalOpen } = useContext(UserContext);
+
+  const [ notice, setNotice ] = useState({});
   const [ deleteModal, setDeleteModal ] = useState(false);
   const [ updateFormModal, setUpdateFormModal ] = useState(false);
+  const [ errorMsg, setErrorMsg ] = useState('');
+
+  useEffect(() => {
+    // Notice Detail取得
+    const get_notice = async () => {
+      const response = await NoticeAPI.get_notice(path.pathname);
+      if (response.status === 200) {
+        const data = await response.json();
+        setNotice(data);
+      } else {
+        console.log("error")
+      }
+    }
+    get_notice();
+  }, [path])
+
+  const writerIsLoginUser = () => {
+    return token && user && user.id === notice.writer_id ? true : false;
+  }
 
   const onSubmitUpdate = () => {
     console.log("update")
@@ -35,11 +63,18 @@ const Notice = () => {
     <Container maxWidth="lg" >
 
       <main>
-      <Button type="button" variant="outlined" sx={{ mb: -10, mr: 1}} size="small" onClick={ () => setUpdateFormModal(true) }>UPDATE</Button>
-      <Button type="button" variant="outlined" sx={{ mb: -10}} color="error" size="small" onClick={ () => setDeleteModal(true) }>DELETE</Button>
+      {
+        writerIsLoginUser()
+        ? <>
+            <Button type="button" variant="outlined" sx={{ mb: -10, mr: 1}} size="small" onClick={ () => { writerIsLoginUser() ? setUpdateFormModal(true) : loginModalOpen() } }>UPDATE</Button>
+            <Button type="button" variant="outlined" sx={{ mb: -10}} color="error" size="small" onClick={ () => { writerIsLoginUser() ? setDeleteModal(true) : loginModalOpen() } }>DELETE</Button>
+          </>
+        : null
+      }
+      
         <Grid container spacing={5} sx={{ mt: 1, pb: 4 }}>
         
-          <Main post={ post } />
+          <Main notice={ notice } />
 
           <Sidebar/>
 
