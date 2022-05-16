@@ -37,6 +37,7 @@ const createData = (no, title, writer, like, _date, views) => {
 const Notices = () => {
   const path = useLocation(); // 現在path
   const { token } = useContext(UserContext);
+  const { create_notice } = NoticeAPI;
 
   const [ notices, setNotices ] = useState([]);
   const [ page, setPage ] = useState(0);
@@ -61,13 +62,24 @@ const Notices = () => {
     notices();
   }, [path, createFormModal])
 
-  const createFormModalOpen = () => {
-    setCreateFormModal(true);
-  };
+  // 掲示板投稿Modalを閉じる
   const createFormModalClose = () => {
     setCreateFormModal(false);
     setErrorMsg('');
   };
+
+  // 掲示板投稿する
+  const onSubmitCreate = async notice => {
+    // 掲示板登録
+    const response = await create_notice(path.pathname, token, notice);
+    if (response.status === 200) {
+      setErrorMsg('');
+      createFormModalClose();
+    } else {
+      const data = await response.json();
+      setErrorMsg(data.detail);
+    }
+  }
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -84,7 +96,7 @@ const Notices = () => {
       {/* 登録ボタンはログインしているユーザーのみ */}
       {
         token
-        ? <Button type="button" variant="outlined" sx={{ mb: 1}} size="small" onClick={ createFormModalOpen }>CREATE</Button>
+        ? <Button type="button" variant="outlined" sx={{ mb: 1}} size="small" onClick={ () => setCreateFormModal(true) }>CREATE</Button>
         : null
       }
 
@@ -131,21 +143,23 @@ const Notices = () => {
         <TablePagination
           rowsPerPageOptions={[10, 25, 100]}
           component="div"
-          count={notices.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
+          count={ notices.length }
+          rowsPerPage={ rowsPerPage }
+          page={ page }
+          onPageChange={ handleChangePage }
+          onRowsPerPageChange={ handleChangeRowsPerPage }
         />
       </Paper>
 
       <CreateForm
-        title="NOTICE CREATE"
-        open={createFormModal}
-        handleClose={createFormModalClose}
-        errorMsg={errorMsg}
-        setErrorMsg={setErrorMsg}
-        token={token}
+        label="NOTICE CREATE"
+        open={ createFormModal }
+        handleClose={ createFormModalClose }
+        onSubmit={ onSubmitCreate }
+        errorMsg={ errorMsg }
+        setErrorMsg={ setErrorMsg }
+        token={ token }
+        btnName="CREATE"
       />
 
     </Container>

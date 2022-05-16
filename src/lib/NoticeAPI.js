@@ -27,3 +27,14 @@ export const get_notice = async (path) => {
   const response = await fetch(`${url}${path}`, param);
   return response;
 }
+
+// Notice Update
+export const update_notice = async (path, token, notice, writer_id) => {
+  const param = { method: "PUT",
+                  headers: { "Content-Type": "application/json;"
+                            , "Authorization": "Bearer " + token },
+                  body: JSON.stringify({ title: notice.title, content: notice.content, writer_id: writer_id })
+                  };
+  const response = await fetch(`${url}${path}`, param);
+  return response;
+}

@@ -19,6 +19,7 @@ import * as NoticeAPI from '../../lib/NoticeAPI';
 const Notice = () => {
   const path = useLocation(); // 現在path
   const { token, user, loginModalOpen } = useContext(UserContext);
+  const { update_notice } = NoticeAPI;
 
   const [ notice, setNotice ] = useState({});
   const [ deleteModal, setDeleteModal ] = useState(false);
@@ -39,13 +40,31 @@ const Notice = () => {
     get_notice();
   }, [path])
 
+  // 掲示板更新Modalを閉じる
+  const updateFormModalClose = () => {
+    setUpdateFormModal(false);
+    setErrorMsg('');
+  };
+
+  // 掲示板作成者とログインユーザーが一致するか
   const writerIsLoginUser = () => {
     return token && user && user.id === notice.writer_id ? true : false;
   }
 
-  const onSubmitUpdate = () => {
-    console.log("update")
+  // Notice Update処理
+  const onSubmitUpdate = async notice => {
+    // 掲示板更新
+    const response = await update_notice(path.pathname, token, notice, user.id);
+    const data = await response.json();
+    if (response.status === 200) {
+      setErrorMsg('');
+      updateFormModalClose();
+      setNotice(data);
+    } else {
+      setErrorMsg(data.detail);
+    }
   }
+
   const onSubmitDelete = () => {
     console.log("delete")
   }
@@ -95,10 +114,15 @@ const Notice = () => {
       />
 
       <UpdateForm 
-        title="NOTICE UPDATE"
+        label="NOTICE UPDATE"
         open={ updateFormModal }
-        handleClose={ () => setUpdateFormModal(false) }
+        handleClose={ updateFormModalClose }
         onSubmit={ onSubmitUpdate }
+        errorMsg={ errorMsg }
+        setErrorMsg={ setErrorMsg }
+        token={ token }
+        data={ notice }
+        btnName="UPDATE"
       />
     </Container>
   );
