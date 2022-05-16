@@ -23,7 +23,6 @@ export const UserProvider = ({ children }) => {
       }
     }
     get_refresh_token();
-    console.log("test")
   }, []);
 
   // Login updates the user data with a name parameter
@@ -76,6 +75,7 @@ export const UserProvider = ({ children }) => {
     const decoded = jwt_decode(token);
     setUser(() => ({
       username: decoded.sub,
+      id: decoded.user_id
     }));
   }
 

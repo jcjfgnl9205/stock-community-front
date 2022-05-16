@@ -14,12 +14,10 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import TextField from '@mui/material/TextField';
 
 import { UserContext } from '../../context/UserContext';
-import LoginModal from '../auth/LoginModal';
-
 
 const Comments = () => {
 
-  const { loginModal, loginModalOpen, loginModalClose } = useContext(UserContext);
+  const { loginModalOpen } = useContext(UserContext);
 
   return (
     <Grid
@@ -143,8 +141,6 @@ const Comments = () => {
           <Typography variant="h6" align="center" gutterBottom>Write comments</Typography>
           <Typography variant="body2" align="center" gutterBottom>Login required</Typography>
         </Box>
-
-        <LoginModal open={ loginModal } handleClose={ loginModalClose }/>
       </Paper>
     </Grid>
   );

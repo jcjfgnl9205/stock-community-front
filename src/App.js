@@ -18,10 +18,12 @@ import Notice from './pages/board/Notice';
 import Contact from './pages/common/Contact';
 import Faq from './pages/common/Faq';
 
+import LoginModal from './components/auth/LoginModal';
 import NotFound from './pages/common/NotFound';
 
 function App() {
   const { token } = useContext(UserContext);
+  const { loginModal, loginModalClose } = useContext(UserContext);
 
   return (
     <Box
@@ -47,6 +49,7 @@ function App() {
           <Route path="*" element={ <NotFound /> } />
         </Routes>
       </Router>
+      <LoginModal open={ loginModal } handleClose={ loginModalClose }/>
     </Box>
   );
 }

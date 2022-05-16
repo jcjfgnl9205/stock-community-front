@@ -15,7 +15,6 @@ import Link from '@mui/material/Link';
 
 import { UserContext } from '../../context/UserContext';
 
-import LoginModal from '../auth/LoginModal';
 
 const navLinks = [
   { title: `NOTICE`, path: `/notices` },
@@ -28,7 +27,7 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const Navbar = () => {
 
-  const { token, loginModal, loginModalOpen, loginModalClose } = useContext(UserContext);
+  const { token, loginModalOpen } = useContext(UserContext);
   const { user, logout } = useContext(UserContext);
   
   const [ anchorElUser, setAnchorElUser ] = useState(null);
@@ -89,13 +88,8 @@ const Navbar = () => {
                 </Menu>
               </Box>
           }
-
-
-          
         </Toolbar>
       </Container>
-      
-      <LoginModal open={ loginModal } handleClose={ loginModalClose }/>
     </AppBar>
   );
 }
