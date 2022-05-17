@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useContext } from 'react';
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
@@ -18,8 +18,9 @@ import * as NoticeAPI from '../../lib/NoticeAPI';
 
 const Notice = () => {
   const path = useLocation(); // 現在path
+  const navigate = useNavigate();
   const { token, user, loginModalOpen } = useContext(UserContext);
-  const { update_notice } = NoticeAPI;
+  const { update_notice, delete_notice } = NoticeAPI;
 
   const [ notice, setNotice ] = useState({});
   const [ deleteModal, setDeleteModal ] = useState(false);
@@ -34,17 +35,24 @@ const Notice = () => {
         const data = await response.json();
         setNotice(data);
       } else {
+        navigate("/notices");
         console.log("error")
       }
     }
     get_notice();
-  }, [path])
+  }, [path, navigate])
 
   // 掲示板更新Modalを閉じる
   const updateFormModalClose = () => {
     setUpdateFormModal(false);
     setErrorMsg('');
   };
+
+  // 掲示板削除Modalを閉じる
+  const deleteFormModalClose = () => {
+    setDeleteModal(false);
+    setErrorMsg('');
+  }
 
   // 掲示板作成者とログインユーザーが一致するか
   const writerIsLoginUser = () => {
@@ -57,7 +65,6 @@ const Notice = () => {
     const response = await update_notice(path.pathname, token, notice, user.id);
     const data = await response.json();
     if (response.status === 200) {
-      setErrorMsg('');
       updateFormModalClose();
       setNotice(data);
     } else {
@@ -65,9 +72,20 @@ const Notice = () => {
     }
   }
 
-  const onSubmitDelete = () => {
+  // Notice Delete処理
+  const onSubmitDelete = async () => {
     console.log("delete")
+    // 掲示板削除
+    const response = await delete_notice(path.pathname, token, user.id);
+    const data = await response.json();
+    if (response.status === 200) {
+      deleteFormModalClose();
+      navigate("/notices");
+    } else {
+      setErrorMsg(data.detail);
+    }
   }
+
   const post = { 
     title : "Title1",
     content : "Content",
@@ -105,7 +123,7 @@ const Notice = () => {
       <DeleteConfirm
         title="Are you sure you want to delete this post?"
         open={ deleteModal }
-        handleClose={ () => setDeleteModal(false) }
+        handleClose={ deleteFormModalClose }
         onSubmit={{
           btnName: "DELETE",
           color: "error",

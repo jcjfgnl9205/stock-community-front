@@ -38,3 +38,14 @@ export const update_notice = async (path, token, notice, writer_id) => {
   const response = await fetch(`${url}${path}`, param);
   return response;
 }
+
+// Notice Delete
+export const delete_notice = async (path, token, writer_id) => {
+  const param = { method: "DELETE",
+                  headers: { "Content-Type": "application/json;"
+                            , "Authorization": "Bearer " + token },
+                  body: JSON.stringify({ writer_id: writer_id })
+                  };
+  const response = await fetch(`${url}${path}`, param);
+  return response;
+}
