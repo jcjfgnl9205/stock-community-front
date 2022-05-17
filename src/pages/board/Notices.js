@@ -155,11 +155,14 @@ const Notices = () => {
         label="NOTICE CREATE"
         open={ createFormModal }
         handleClose={ createFormModalClose }
-        onSubmit={ onSubmitCreate }
+        onSubmit={{
+          btnName: "CREATE",
+          color: "primary",
+          onSubmit: onSubmitCreate
+        }}
         errorMsg={ errorMsg }
         setErrorMsg={ setErrorMsg }
         token={ token }
-        btnName="CREATE"
       />
 
     </Container>

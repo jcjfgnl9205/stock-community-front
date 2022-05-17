@@ -135,7 +135,11 @@ const Notice = () => {
         label="NOTICE UPDATE"
         open={ updateFormModal }
         handleClose={ updateFormModalClose }
-        onSubmit={ onSubmitUpdate }
+        onSubmit={{
+          btnName: "UPDATE",
+          color: "primary",
+          onSubmit: onSubmitUpdate
+        }}
         errorMsg={ errorMsg }
         setErrorMsg={ setErrorMsg }
         token={ token }

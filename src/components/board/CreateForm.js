@@ -62,7 +62,7 @@ const CreateForm = (props) => {
       return;
     }
 
-    props.onSubmit(notice);
+    props.onSubmit.onSubmit(notice);
   }
   const ckeditorOnChange = e => {
     const name = "content";
@@ -106,7 +106,7 @@ const CreateForm = (props) => {
 
           <DialogActions>
             <Button type="button" onClick={props.handleClose} color="error">CANCEL</Button>
-            <Button type="submit" >{ props.btnName }</Button>
+            <Button type="submit" color={props.onSubmit.color}>{props.onSubmit.btnName}</Button>
           </DialogActions>
         </Box>
       </Dialog>
