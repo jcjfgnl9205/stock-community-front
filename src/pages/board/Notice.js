@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 
 import Main from '../../components/board/Main';
 import Sidebar from '../../components/board/Sidebar';
+import LikeHate from '../../components/board/LikeHate';
 import Comments from '../../components/board/Comments';
 import UpdateForm from '../../components/board/CreateForm';
 import DeleteConfirm from '../../components/common/Modal1';
@@ -23,6 +24,9 @@ const Notice = () => {
   const { update_notice, delete_notice } = NoticeAPI;
 
   const [ notice, setNotice ] = useState({});
+  const [ voteState, setVoteState ] = useState({ "like": false, "hate": false })
+  const [ voteCnt, setVoteCnt ] = useState({"like": 0, "hate": 0});
+
   const [ deleteModal, setDeleteModal ] = useState(false);
   const [ updateFormModal, setUpdateFormModal ] = useState(false);
   const [ errorMsg, setErrorMsg ] = useState('');
@@ -40,7 +44,26 @@ const Notice = () => {
       }
     }
     get_notice();
-  }, [path, navigate])
+
+    // Notice Like, Hate count取得
+    const get_votes_function = async () => {
+      const response = await NoticeAPI.get_votes(path.pathname);
+      if (response.status === 200) {
+        const data = await response.json();
+        // LoginしているユーザーのLike, Hate　Button State
+        const userVoteState = data?.filter( vote => vote.user_id === user?.id);
+        setVoteState({ "like": userVoteState[0]?.["like"], "hate": userVoteState[0]?.["hate"] });
+
+        // Like, Hate Button count
+        const likeCnt = data?.filter( vote => vote.like ).length;
+        const hateCnt = data?.filter( vote => vote.hate ).length;
+        setVoteCnt({ "like": likeCnt, "hate": hateCnt });
+      } else {
+        console.log("error")
+      }
+    }
+    get_votes_function();
+  }, [path, navigate, user])
 
   // 掲示板更新Modalを閉じる
   const updateFormModalClose = () => {
@@ -56,7 +79,7 @@ const Notice = () => {
 
   // 掲示板作成者とログインユーザーが一致するか
   const writerIsLoginUser = () => {
-    return token && user && user.id === notice.writer_id ? true : false;
+    return token && user.id === notice.writer_id ? true : false;
   }
 
   // Notice Update処理
@@ -74,7 +97,6 @@ const Notice = () => {
 
   // Notice Delete処理
   const onSubmitDelete = async () => {
-    console.log("delete")
     // 掲示板削除
     const response = await delete_notice(path.pathname, token, user.id);
     const data = await response.json();
@@ -108,15 +130,21 @@ const Notice = () => {
           </>
         : null
       }
-      
+
         <Grid container spacing={5} sx={{ mt: 1, pb: 4 }}>
-        
-          <Main notice={ notice } />
+          <Grid container item xs={12} md={8} direction="column">
+
+            <Main notice={ notice } />
+            <LikeHate
+              voteCnt={ voteCnt }
+              setVoteCnt={ setVoteCnt }
+              voteState={ voteState }
+              setVoteState={ setVoteState }
+            />
+            <Comments post={ post } />
+          </Grid>
 
           <Sidebar/>
-
-          <Comments post={ post } />
-          
         </Grid>
       </main>
 

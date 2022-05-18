@@ -49,3 +49,22 @@ export const delete_notice = async (path, token, writer_id) => {
   const response = await fetch(`${url}${path}`, param);
   return response;
 }
+
+// Get Notice Like, Hate count
+export const get_votes = async (path) => {
+  const param = { method: "GET",
+                  headers: { "Content-Type": "application/json;" }};
+  const response = await fetch(`${url}${path}/vote`, param);
+  return response;
+}
+
+// Notice Like, Hate Button Click Event
+export const update_vote = async (path, token, vote) => {
+  const param = { method: "POST",
+                  headers: { "Content-Type": "application/json;"
+                            , "Authorization": "Bearer " + token },
+                  body: JSON.stringify(vote)
+                  };
+  const response = await fetch(`${url}${path}/vote`, param);
+  return response;
+}
