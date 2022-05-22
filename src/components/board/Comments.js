@@ -131,62 +131,65 @@ const Comments = (props) => {
 
       <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
 
-        {
-          props.comments[commentCurrentPage - 1]?.map((comment, i) => {
-            return (
-              <div key={ comment.id }>
-              <ListItem alignItems="flex-start" >
-                <ListItemAvatar>
-                  <Avatar alt={ comment.writer } src="/static/images/avatar/1.jpg" />
-                </ListItemAvatar>
-                <ListItemText
-                  primary={
-                    <React.Fragment>
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          bgcolor: 'background.paper',
-                          borderRadius: 1,
-                          fontWeight: 'bold'
-                        }}
-                      >
-                        <Typography variant="body" color={grey[900]}>{ comment.writer }</Typography>
-                        {/* loginユーザーとコメント作成者が一致する場合、update, delete buttonを表示する */}
-                        {
-                          props.token && props.user?.username === comment.writer
-                          ?
-                          <Box sx={{ display: 'flex' }}>
-                          <ModeEditOutlineOutlinedIcon sx={{ "&:hover": { color: blue[600] } }} onClick={ () => onEditButtonClick(comment.id, comment.comment) } />
-                          <DeleteForeverOutlinedIcon type="submit" sx={{ "&:hover": { color: red[600] } }} onClick={ () => onDeletebuttonClick(comment.id) } />
-                          <Typography variant="body2" color={grey[900]}>{ comment.date }</Typography>
+        { props.comments?.length === 0
+          ? <Box>
+              <Typography variant="h6" align="center">No comments</Typography>
+            </Box>
+          : props.comments[commentCurrentPage - 1]?.map((comment, i) => {
+              return (
+                <div key={ comment.id }>
+                <ListItem alignItems="flex-start" >
+                  <ListItemAvatar>
+                    <Avatar alt={ comment.writer } src="/static/images/avatar/1.jpg" />
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={
+                      <React.Fragment>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            bgcolor: 'background.paper',
+                            borderRadius: 1,
+                            fontWeight: 'bold'
+                          }}
+                        >
+                          <Typography variant="body" color={grey[900]}>{ comment.writer }</Typography>
+                          {/* loginユーザーとコメント作成者が一致する場合、update, delete buttonを表示する */}
+                          {
+                            props.token && props.user?.username === comment.writer
+                            ?
+                            <Box sx={{ display: 'flex' }}>
+                            <ModeEditOutlineOutlinedIcon sx={{ "&:hover": { color: blue[600] } }} onClick={ () => onEditButtonClick(comment.id, comment.comment) } />
+                            <DeleteForeverOutlinedIcon type="submit" sx={{ "&:hover": { color: red[600] } }} onClick={ () => onDeletebuttonClick(comment.id) } />
+                            <Typography variant="body2" color={grey[900]}>{ comment.date }</Typography>
+                          </Box>
+                            :null
+                          }
                         </Box>
-                          :null
-                        }
-                      </Box>
-                    </React.Fragment>
-                  }
-                  secondary={
-                    <React.Fragment>
-                      <Typography
-                        sx={{ display: 'inline' }}
-                        component="span"
-                        variant="body2"
-                        color="text.primary"
-                      >
-                        {
-                          comment.comment?.split("\n").map((data, key) => {
-                            return <span key={ key }>{ data }<br/></span>
-                          })
-                        }
-                      </Typography>
-                    </React.Fragment>
-                  }
-                />
-              </ListItem>
-              <Divider variant="inset" component="li" />
-              </div>
-            );
+                      </React.Fragment>
+                    }
+                    secondary={
+                      <React.Fragment>
+                        <Typography
+                          sx={{ display: 'inline' }}
+                          component="span"
+                          variant="body2"
+                          color="text.primary"
+                        >
+                          {
+                            comment.comment?.split("\n").map((data, key) => {
+                              return <span key={ key }>{ data }<br/></span>
+                            })
+                          }
+                        </Typography>
+                      </React.Fragment>
+                    }
+                  />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+                </div>
+              );
           })
         }
       </List>
@@ -194,7 +197,12 @@ const Comments = (props) => {
       <Divider />
 
       {/* <Pagination setCommentCurrentPage={ setCommentCurrentPage } total={ props.comments?.length }/> */}
-      <Pagination total={ props.comments?.length } setCommentCurrentPage={ setCommentCurrentPage } commentCurrentPage={ commentCurrentPage }/>
+      {
+        props.comments?.length === 0
+        ? null
+        : <Pagination total={ props.comments?.length } setCommentCurrentPage={ setCommentCurrentPage } commentCurrentPage={ commentCurrentPage }/>
+      }
+      
       {/* 
         Loginしている場合：テキストエリアを表示する
         Loginしていない場合：Loginしてくださいの文言を表示、クリックするとログインmodalを表示する
