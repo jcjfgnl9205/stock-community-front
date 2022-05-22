@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
 
 import Grid from '@mui/material/Grid';
@@ -11,11 +11,16 @@ import Sidebar from '../../components/board/Sidebar';
 import LikeHate from '../../components/board/LikeHate';
 import Comments from '../../components/board/Comments';
 import UpdateForm from '../../components/board/CreateForm';
-import DeleteConfirm from '../../components/common/Modal1';
+import DeleteConfirm from '../../components/common/ConfirmModal';
 
 import { UserContext } from '../../context/UserContext';
 import * as NoticeAPI from '../../lib/NoticeAPI';
+import * as config from '../../config';
 
+const createCommentData = (id, comment, writer, _date) => {
+  const date = config.formatDate(_date);
+  return { id, comment, writer, date };
+}
 
 const Notice = () => {
   const path = useLocation(); // 現在path
@@ -27,9 +32,21 @@ const Notice = () => {
   const [ voteState, setVoteState ] = useState({ "like": false, "hate": false })
   const [ voteCnt, setVoteCnt ] = useState({"like": 0, "hate": 0});
 
+  const [ comments, setComments ] = useState([]);
+  const [ paginationPage ] = useState(5);//一つのページに表示するcomment数
+
   const [ deleteModal, setDeleteModal ] = useState(false);
   const [ updateFormModal, setUpdateFormModal ] = useState(false);
   const [ errorMsg, setErrorMsg ] = useState('');
+
+
+  // commentをsetする
+  const setCommentData = useCallback((data) => {
+    const newData = data.items?.map(comment => {
+      return createCommentData(comment.id, comment.comment, comment.writer, comment.created_at);
+    });
+    setComments(config.division(newData, paginationPage));
+  }, [paginationPage])
 
   useEffect(() => {
     // Notice Detail取得
@@ -63,7 +80,19 @@ const Notice = () => {
       }
     }
     get_votes_function();
-  }, [path, navigate, user])
+
+    // Notice Comments
+    const get_notice_comments = async () => {
+      const response = await NoticeAPI.get_notice_comments(path.pathname);
+      if (response.status === 200) {
+        const data = await response.json();
+        setCommentData(data);
+      } else {
+        console.log("error");
+      }
+    }
+    get_notice_comments();
+  }, [path, navigate, user, paginationPage, setCommentData])
 
   // 掲示板更新Modalを閉じる
   const updateFormModalClose = () => {
@@ -85,7 +114,7 @@ const Notice = () => {
   // Notice Update処理
   const onSubmitUpdate = async notice => {
     // 掲示板更新
-    const response = await update_notice(path.pathname, token, notice, user.id);
+    const response = await update_notice(path.pathname, token, notice);
     const data = await response.json();
     if (response.status === 200) {
       updateFormModalClose();
@@ -98,7 +127,7 @@ const Notice = () => {
   // Notice Delete処理
   const onSubmitDelete = async () => {
     // 掲示板削除
-    const response = await delete_notice(path.pathname, token, user.id);
+    const response = await delete_notice(path.pathname, token);
     const data = await response.json();
     if (response.status === 200) {
       deleteFormModalClose();
@@ -108,15 +137,18 @@ const Notice = () => {
     }
   }
 
-  const post = { 
-    title : "Title1",
-    content : "Content",
-    writer: "admin1234",
-    created_at: "2020-01-02 08:88",
-    views: "22",
-    likes: "33",
-    comments: "3"
+  // 掲示板のコメントを登録する
+  const onSubmitCreateComment = async comment => {
+    const response = await NoticeAPI.create_notice_comment(path.pathname, token, comment);
+    const data = await response.json();
+    if (response.status === 200) {
+      setCommentData(data);
+    } else {
+      setErrorMsg(data.detail);
+    }
   }
+
+
 
   return (
     <Container maxWidth="lg" >
@@ -141,7 +173,14 @@ const Notice = () => {
               voteState={ voteState }
               setVoteState={ setVoteState }
             />
-            <Comments post={ post } />
+            <Comments
+              token={ token }
+              user={ user }
+              pathname={ path.pathname }
+              comments={ comments } 
+              onSubmit={ onSubmitCreateComment }
+              setCommentData={ setCommentData }
+            />
           </Grid>
 
           <Sidebar/>

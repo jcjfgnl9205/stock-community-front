@@ -7,7 +7,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 
-const Modal1 = (props) => {
+const ConfirmModal = (props) => {
 
   return (
     <Dialog
@@ -29,7 +29,7 @@ const Modal1 = (props) => {
         : null
       }
       <DialogActions>
-        <Button onClick={props.handleClose}>CANCEL</Button>
+        <Button onClick={props.handleClose} color="inherit">CANCEL</Button>
         {
           props.onSubmit
           ? <Button onClick={props.onSubmit.onSubmit} color={props.onSubmit.color}>{props.onSubmit.btnName}</Button>
@@ -40,4 +40,4 @@ const Modal1 = (props) => {
   );
 }
 
-export default React.memo(Modal1);
+export default React.memo(ConfirmModal);
