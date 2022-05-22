@@ -20,7 +20,7 @@ const Main = ({ notice }) => {
         {config.formatDate(notice.created_at)}　・　
         Views:{notice.views}　・　
         Likes:{notice.like_cnt}　・　
-        Comments:{notice.like_cnt}
+        Comments:{notice.notice_comment_cnt}
       </Typography>
 
       <Divider />

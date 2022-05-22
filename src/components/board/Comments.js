@@ -118,7 +118,7 @@ const Comments = (props) => {
         }}
       >
         <Typography variant="h5" gutterBottom>Comments</Typography>
-        <Typography variant="body2" color={deepPurple[600]}>total { props.comments?.length }</Typography>
+        <Typography variant="body2" color={deepPurple[600]}>total { props.commentCnt }</Typography>
       </Box>
 
       <Divider />

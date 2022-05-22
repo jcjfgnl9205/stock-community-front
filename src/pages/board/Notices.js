@@ -29,9 +29,10 @@ const columns = [
   { id: 'views', label: 'Views', align: 'center', minWidth: 50 },
 ];
 
-const createData = (no, title, writer, like, _date, views) => {
+const createData = (no, title, writer, like, _date, views, comment_cnt) => {
   const date = config.formatDate(_date);
-  return { no, title, writer, like, date, views };
+  const _title = `${title} [${comment_cnt}]`;
+  return { no: no, title: _title, writer: writer, like: like, date: date, views: views };
 }
 
 const Notices = () => {
@@ -52,7 +53,7 @@ const Notices = () => {
       if (response.status === 200) {
         const data = await response.json();
         const newData = data.items?.map(notice => {
-          return createData(notice.id, notice.title, notice.writer, notice.views, notice.created_at, notice.views)
+          return createData(notice.id, notice.title, notice.writer, notice.like_cnt, notice.created_at, notice.views, notice.notice_comment_cnt)
         });
         setNotices(newData)
       } else {

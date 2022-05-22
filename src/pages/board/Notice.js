@@ -33,6 +33,7 @@ const Notice = () => {
   const [ voteCnt, setVoteCnt ] = useState({"like": 0, "hate": 0});
 
   const [ comments, setComments ] = useState([]);
+  const [ commentCnt, setCommentCnt ] = useState(0);
   const [ paginationPage ] = useState(5);//一つのページに表示するcomment数
 
   const [ deleteModal, setDeleteModal ] = useState(false);
@@ -42,6 +43,7 @@ const Notice = () => {
 
   // commentをsetする
   const setCommentData = useCallback((data) => {
+    setCommentCnt(data.total);
     const newData = data.items?.map(comment => {
       return createCommentData(comment.id, comment.comment, comment.writer, comment.created_at);
     });
@@ -180,6 +182,7 @@ const Notice = () => {
               user={ user }
               pathname={ path.pathname }
               comments={ comments } 
+              commentCnt={ commentCnt }
               onSubmit={ onSubmitCreateComment }
               setCommentData={ setCommentData }
             />
