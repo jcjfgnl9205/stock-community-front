@@ -1,5 +1,4 @@
 import React, { useState, useContext } from 'react';
-import { useNavigate } from "react-router-dom";
 
 // Material-UI
 import Typography from '@mui/material/Typography';
@@ -35,8 +34,6 @@ import * as config from '../../config';
 
 const Comments = (props) => {
 
-  const navigate = useNavigate();
-
   const { loginModalOpen } = useContext(UserContext);
   const [ deleteModal, setDeleteModal ] = useState(false); // comment削除するmodal state
   const [ editModal, setEditModal ] = useState(false); // comment更新するmodal state
@@ -62,8 +59,8 @@ const Comments = (props) => {
       return;
     }
     e.target.comment.value = '';
+    setComment({"comment": ""});
     setCommentCurrentPage(1);
-    navigate(`?cpage=1`);
     props.onSubmit(comment);
   }
 
@@ -78,8 +75,6 @@ const Comments = (props) => {
     setCurrentCommentId(comment_id);
     setComment(data)
     setEditModal(prev => !prev);
-
-    console.log("updatebtn")
   }
 
   // コメントを修正する
@@ -110,7 +105,6 @@ const Comments = (props) => {
     } else {
       setErrorMsg(data.detail);
     }
-    console.log(props.comments)
   }
 
   return (

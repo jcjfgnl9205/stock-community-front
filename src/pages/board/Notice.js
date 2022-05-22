@@ -80,7 +80,9 @@ const Notice = () => {
       }
     }
     get_votes_function();
+  }, [path, navigate, user])
 
+  useEffect(() => {
     // Notice Comments
     const get_notice_comments = async () => {
       const response = await NoticeAPI.get_notice_comments(path.pathname);
@@ -92,7 +94,7 @@ const Notice = () => {
       }
     }
     get_notice_comments();
-  }, [path, navigate, user, paginationPage, setCommentData])
+  }, [path, setCommentData])
 
   // 掲示板更新Modalを閉じる
   const updateFormModalClose = () => {
