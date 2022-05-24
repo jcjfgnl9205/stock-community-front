@@ -1,5 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 
+// Material-UI
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -7,7 +8,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Paper from '@mui/material/Paper';
 
 
-const AddressForm1 = () => {
+const AddressForm1 = (props) => {
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>Personal information</Typography>
@@ -33,8 +34,9 @@ const AddressForm1 = () => {
       </Paper>
       <Grid item xs={12}>
         <FormControlLabel
-          control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
+          control={<Checkbox color="primary" name="agree" checked={ props.checked } onChange={ props.handleChange } inputProps={{ 'aria-label': 'controlled' }}/>}
           label="Consent for Use of Personal Information. Please read the terms below and click the I Agree button if you agree to them."
+          onChange={ props.onChange }
         />
       </Grid>
     </React.Fragment>
