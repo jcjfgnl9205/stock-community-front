@@ -10,9 +10,11 @@ export const UserProvider = ({ children }) => {
   const [ token, setToken ] = useState('');
   const [ user, setUser ] = useState({ id: '', username: '', is_active: false, if_staff: false });
   const [ loginModal, setLoginModal ] = useState(false);
+  const [ myinfoModal, setMyinfoModal ] = useState(false);
   
   const loginModalOpen = () => { setLoginModal(true); }
   const loginModalClose = () => { setLoginModal(false); }
+  const myinfoModalToggle = () => { setMyinfoModal(myinfoModal => !myinfoModal); };
 
   useEffect(() => {
     const get_refresh_token = async () => {
@@ -80,7 +82,7 @@ export const UserProvider = ({ children }) => {
   }
 
   return (
-    <UserContext.Provider value={{ token, user, login, logout, loginModal, loginModalOpen, loginModalClose }}>
+    <UserContext.Provider value={{ token, user, login, logout, loginModal, loginModalOpen, loginModalClose, myinfoModal, myinfoModalToggle }}>
       {children}
     </UserContext.Provider>
   );

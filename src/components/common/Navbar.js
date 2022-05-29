@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
+// Material-UI
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -22,18 +23,26 @@ const navLinks = [
   { title: `FAQ`, path: `/faq` },
 ];
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
+
+const loginMenu = (username) => {
+  const settings = [
+    {title: 'Profile', path: `/${username}`},
+    {title: 'Logout', path: '#'}
+  ];
+  return settings;
+}
 
 const Navbar = () => {
 
   const { token, loginModalOpen } = useContext(UserContext);
   const { user, logout } = useContext(UserContext);
-  
+  const { myinfoModalToggle } = useContext(UserContext);
+
   const [ anchorElUser, setAnchorElUser ] = useState(null);
 
   return (
-    <AppBar position="static">
+    <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography variant="h6" noWrap component="div" sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }} >
@@ -76,12 +85,12 @@ const Navbar = () => {
                   open={ Boolean(anchorElUser) }
                   onClose={ () => setAnchorElUser(null) }
                 >
-                  {settings.map(setting => (
-                    <MenuItem key={ setting } onClick={ () => setAnchorElUser(null) } >
+                  {loginMenu(user.username)?.map(({ title, path }) => (
+                    <MenuItem key={ title } onClick={ () => setAnchorElUser(null) } >
                       {
-                        setting === 'Logout'
-                        ? <Link to="#" component={ RouterLink } onClick={ logout } underline="none" color="inherit" sx={{ mx: 2, display: 'block' }} >{ setting }</Link>
-                        : <Typography textAlign="center">{ setting }</Typography>
+                        title === 'Logout'
+                        ? <Link to={ path } component={ RouterLink } onClick={ logout } underline="none" color="inherit" >{ title }</Link>
+                        : <Link to={ path } component={ RouterLink } onClick={ myinfoModalToggle } underline="none" color="inherit">{ title }</Link>
                       }
                     </MenuItem>
                   ))}

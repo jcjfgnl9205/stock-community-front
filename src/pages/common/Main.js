@@ -1,7 +1,7 @@
 import React from 'react';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Box from '@mui/material/Box';
 
+// Material-UI
+import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -13,12 +13,11 @@ import UserStock from './UserStock';
 import MainNews from './MainNews';
 import MainNotice from './MainNotice';
 
-const mdTheme = createTheme();
 
 const Main = () => {
 
   return (
-    <ThemeProvider theme={mdTheme}>
+    <Container component="main">
       <Box sx={{ display: 'flex' }}>
         <Box
           component="main"
@@ -85,7 +84,7 @@ const Main = () => {
           </Container>
         </Box>
       </Box>
-    </ThemeProvider>
+    </Container>
   );
 }
 

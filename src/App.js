@@ -5,12 +5,15 @@ import {
   Route,
   Navigate,
   } from "react-router-dom";
+
+// Material-UI
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import { UserContext } from './context/UserContext';
 
 import Navbar from './components/common/Navbar';
 import Signup from './pages/auth/Signup';
+import Me from './pages/auth/Me';
 
 import Main from './pages/common/Main';
 import Notices from './pages/board/Notices';
@@ -22,7 +25,7 @@ import LoginModal from './components/auth/LoginModal';
 import NotFound from './pages/common/NotFound';
 
 function App() {
-  const { token } = useContext(UserContext);
+  const { user, token } = useContext(UserContext);
   const { loginModal, loginModalClose } = useContext(UserContext);
 
   return (
@@ -30,6 +33,8 @@ function App() {
       sx={{
         backgroundColor: (theme) => theme.palette.grey[100],
         minHeight: '100vh',
+        display: 'flex',
+        pt:8
       }}
     >
       <Router>
@@ -38,6 +43,7 @@ function App() {
         <Routes>
           <Route path="/" element={ <Main /> } />
           <Route path="/signup" element={ token ? <Navigate to="/" replace /> : <Signup /> } />
+          <Route path={`/${user.username}`} element={ !token ? <Navigate to="/" replace /> : <Me /> } />
 
 
           <Route path="/notices" element={ <Notices /> } />
