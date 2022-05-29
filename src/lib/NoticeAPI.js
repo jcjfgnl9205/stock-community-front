@@ -28,6 +28,15 @@ export const get_notice = async (path) => {
   return response;
 }
 
+// Notice View Count Up
+export const update_notice_view_count = async (path) => {
+  const param = { method: "PUT",
+                  headers: { "Content-Type": "application/json;"}
+                  };
+  const response = await fetch(`${url}${path}/view-count`, param);
+  return response;
+}
+
 // Notice Update
 export const update_notice = async (path, token, notice) => {
   const param = { method: "PUT",

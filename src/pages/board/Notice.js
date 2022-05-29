@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
+import { useCookies } from 'react-cookie';
 
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
@@ -15,6 +16,7 @@ import DeleteConfirm from '../../components/common/ConfirmModal';
 
 import { UserContext } from '../../context/UserContext';
 import * as NoticeAPI from '../../lib/NoticeAPI';
+import * as Common from '../../lib/Common';
 import * as config from '../../config';
 
 const createCommentData = (id, comment, writer, _date) => {
@@ -26,6 +28,7 @@ const Notice = () => {
   const path = useLocation(); // 現在path
   const navigate = useNavigate();
   const { token, user, loginModalOpen } = useContext(UserContext);
+  const [ cookies, setCookie ] = useCookies(["postView"]);
   const { update_notice, delete_notice } = NoticeAPI;
 
   const [ notice, setNotice ] = useState({});
@@ -53,7 +56,7 @@ const Notice = () => {
   useEffect(() => {
     // Notice Detail取得
     const get_notice = async () => {
-      const response = await NoticeAPI.get_notice(path.pathname);
+      const response = Common.view_count_check(path.pathname.split("/").at(-1), setCookie, cookies) ? await NoticeAPI.update_notice_view_count(path.pathname) : await NoticeAPI.get_notice(path.pathname);
       if (response.status === 200) {
         const data = await response.json();
         setNotice(data);
@@ -63,7 +66,9 @@ const Notice = () => {
       }
     }
     get_notice();
+  }, [cookies, setCookie, navigate, path]);
 
+  useEffect(() => {
     // Notice Like, Hate count取得
     const get_votes_function = async () => {
       const response = await NoticeAPI.get_votes(path.pathname);
