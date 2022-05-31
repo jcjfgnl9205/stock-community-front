@@ -2,8 +2,6 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -20,7 +18,7 @@ const ContentList = ({data, onClick}) => {
             <React.Fragment key={ index }>
               <ListItem disablePadding >
                 <ListItemButton onClick={ onClick }>
-                  <Typography variant="subtitle1" component="span">{ data }</Typography>
+                  <Typography variant="subtitle1" component="span" align="center">{ data }</Typography>
                 </ListItemButton>
               </ListItem>
               <Divider />
@@ -45,11 +43,7 @@ const ListModal = (props) => {
       </DialogTitle>
       {
         props.content
-        ? <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              <ContentList data={ props.content } onClick={ props.addressOnClick }/>
-            </DialogContentText>
-          </DialogContent>
+        ? <ContentList data={ props.content } onClick={ props.addressOnClick }/>
         : null
       }
       <DialogActions>
