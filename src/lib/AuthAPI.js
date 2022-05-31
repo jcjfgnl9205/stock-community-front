@@ -41,3 +41,36 @@ export const addressApi = async zipcode => {
     return data;
   }
 }
+
+// ユーザー情報取得
+export const get_user_api = async (path, token) => {
+  const param = { method: "GET",
+                  headers: { "Content-Type": "application/json;"
+                            , "Authorization": "Bearer " + token },
+                  };
+  const response = await fetch(`${url}/auth${path}`, param);
+  return response;
+}
+
+
+// ユーザー情報更新
+export const update_user_api = async (path, token, user) => {
+  const param = { method: "PUT",
+                  headers: { "Content-Type": "application/json;"
+                            , "Authorization": "Bearer " + token },
+                  body: JSON.stringify(user)
+                  };
+  const response = await fetch(`${url}/auth${path}`, param);
+  return response;
+}
+
+// ユーザーpassword更新
+export const update_password_api = async (path, token, password) => {
+  const param = { method: "PUT",
+                  headers: { "Content-Type": "application/json;"
+                            , "Authorization": "Bearer " + token },
+                  body: JSON.stringify({oldPassword: password.oldPassword, password: password.password})
+                  };
+  const response = await fetch(`${url}/auth${path}/pw`, param);
+  return response;
+}

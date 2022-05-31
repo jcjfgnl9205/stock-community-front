@@ -15,6 +15,7 @@ export const MSG902 = "passwordは8~16桁の英文字、数字で入力してく
 export const MSG903 = "email形式で入力してください。";
 export const MSG904 = "usernameを確認してください。";
 export const MSG905 = "passwordを確認してください。";
+export const MSG906 = "oldpasswordを確認してください。";
 export const MSG941 = "username, passwordを確認してください。";
 export const MSG951 = "存在しない郵便番号です。";
 export const MSG971 = "checkboxを同意してください。";

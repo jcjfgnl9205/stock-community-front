@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
+import { useLocation } from "react-router-dom";
 
 // Material-UI
 import Typography from '@mui/material/Typography';
@@ -9,13 +10,48 @@ import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
+import Alert from '@mui/material/Alert';
 
+import { UserContext } from '../../context/UserContext';
+import { update_password_api } from '../../lib/AuthAPI';
+import * as Validation from '../../lib/Validation';
+import * as config from '../../config';
 
 const MePasswordUpdate = () => {
 
-  const onSubmit = e => {
+  const path = useLocation(); // 現在path
+  const { token, logout } = useContext(UserContext);
+  const [ password, setPassword ] = useState({ oldPassword: "", password: "", passwordCheck: "" });
+  const [ errorMsg, setErrorMsg ] = useState('');
+
+  const onChange = e => {
+    const { value, name } = e.target;
+    setPassword({
+      ...password, //Inputをコビーする
+      [name]: value
+    });
+  };
+
+  const onSubmit = async e => {
     e.preventDefault();
-    console.log("onsubmit");
+    if (!Validation.isPassword(password.oldPassword) || !Validation.isPassword(password.password) || !Validation.isPassword(password.passwordCheck)) {
+      setErrorMsg(config.MSG902);
+      return;
+    }
+    if (password.password !== password.passwordCheck) {
+      setErrorMsg(config.MSG905);
+      return;
+    }
+    const response = await update_password_api(path.pathname, token, password);
+    const data = await response.json();
+    if (response.status !== 200 ) {
+      setErrorMsg(data.detail);
+      return;
+    }
+    setErrorMsg('');
+    setPassword({ oldPassword: "", password: "", passwordCheck: "" });
+    alert("PASSWORDが変更されました。再ログインしてください。");
+    logout();
   }
 
   return (
@@ -35,6 +71,7 @@ const MePasswordUpdate = () => {
               name="oldPassword"
               fullWidth
               variant="standard"
+              onChange={ onChange }
             />
           </Grid>
           <Grid item xs={12} md={12}>
@@ -45,6 +82,7 @@ const MePasswordUpdate = () => {
               name="password"
               fullWidth
               variant="standard"
+              onChange={ onChange }
             />
           </Grid>
           <Grid item xs={12} md={12}>
@@ -55,6 +93,7 @@ const MePasswordUpdate = () => {
               name="passwordCheck"
               fullWidth
               variant="standard"
+              onChange={ onChange }
             />
           </Grid>
         </Grid>
@@ -62,6 +101,13 @@ const MePasswordUpdate = () => {
           <Button type="submit" variant="outlined" color="primary" size="small" >UPDATE</Button>
         </Stack>
       </Box>
+      {
+        errorMsg !== ''
+        ? <Stack sx={{ width: '100%', mt: 2 }} >
+            <Alert severity="error">{ errorMsg }</Alert>
+          </Stack>
+        : null
+      }
     </Container>
   );
 }
