@@ -1,4 +1,7 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { useCookies } from 'react-cookie';
+
+// Material-UI
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
@@ -52,9 +55,29 @@ const BootstrapDialogTitle = (props) => {
 const LoginModal = (props) => {
 
   const { login } = useContext(UserContext);
+  const [ cookies, setCookie, removeCookie ] = useCookies(["rememberUsername"]);
 
   const [ user, setUser ] = useState({username: "", password: ""});
+  const [ isRemember, setIsRemember ] = useState(false);
   const [ errorMsg, setErrorMsg ] = useState('');
+
+  // cookieにusernameがある場合表示する
+  useEffect(() => {
+    if(cookies.rememberUsername !== undefined) {
+      
+      setUser(prev => { return { ...prev, username: cookies.rememberUsername } });
+      setIsRemember(true);
+    }
+  }, [cookies]);
+
+  const onChangeIsRemember = (e) => {
+    setIsRemember(e.target.checked);
+    if(e.target.checked){
+      setCookie('rememberUsername', user.username, { maxAge: 60 * 60 * 24 * 7 });
+    } else {
+      removeCookie('rememberUsername');
+    }
+  }
 
   const onChange = e => {
     const { value, name } = e.target;
@@ -101,6 +124,7 @@ const LoginModal = (props) => {
                 label="username"
                 name="username"
                 autoFocus
+                value={ user.username }
                 inputProps={{ minLength: 8, maxLength : 20 }}
                 onChange={ onChange }
               />
@@ -116,7 +140,7 @@ const LoginModal = (props) => {
                 onChange={ onChange }
               />
               <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
+                control={<Checkbox value="remember" color="primary" checked={ isRemember } onChange={ onChangeIsRemember } />}
                 label="Remember me"
               />
 
