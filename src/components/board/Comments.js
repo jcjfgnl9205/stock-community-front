@@ -154,10 +154,10 @@ const Comments = (props) => {
                             props.token && props.user?.username === comment.writer
                             ?
                             <Box sx={{ display: 'flex' }}>
-                            <ModeEditOutlineOutlinedIcon sx={{ "&:hover": { color: blue[600] } }} onClick={ () => onEditButtonClick(comment.id, comment.comment) } />
-                            <DeleteForeverOutlinedIcon type="submit" sx={{ "&:hover": { color: red[600] } }} onClick={ () => onDeletebuttonClick(comment.id) } />
-                            <Typography variant="body2" color={grey[900]}>{ comment.date }</Typography>
-                          </Box>
+                              <ModeEditOutlineOutlinedIcon sx={{ "&:hover": { color: blue[600] } }} onClick={ () => onEditButtonClick(comment.id, comment.comment) } />
+                              <DeleteForeverOutlinedIcon type="submit" sx={{ "&:hover": { color: red[600] } }} onClick={ () => onDeletebuttonClick(comment.id) } />
+                              <Typography variant="body2" color={grey[900]}>{ comment.date }</Typography>
+                            </Box>
                             :null
                           }
                         </Box>
