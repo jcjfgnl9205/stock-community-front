@@ -57,6 +57,7 @@ export const UserProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem("token");
     setToken('');
+    setUser('');
   };
 
   const refresh_token = async (token) => { 
@@ -77,7 +78,9 @@ export const UserProvider = ({ children }) => {
     const decoded = jwt_decode(token);
     setUser(() => ({
       username: decoded.sub,
-      id: decoded.user_id
+      id: decoded.user_id,
+      is_active: decoded.is_active,
+      is_staff: decoded.is_staff
     }));
   }
 

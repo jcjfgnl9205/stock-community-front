@@ -20,6 +20,9 @@ export const MSG941 = "username, passwordを確認してください。";
 export const MSG951 = "存在しない郵便番号です。";
 export const MSG971 = "checkboxを同意してください。";
 
+export const MSG801 = name => {
+  return `${name}を入力してください。`;
+}
 
 export const formatDate = date => {
   const d = new Date(date);
@@ -49,4 +52,13 @@ export const division = (arr, n) => {
   }
 
   return newArray;
+}
+
+// テキストを改行する
+export const multiLine = text => {
+  return text.split("\n").map((t, index) => {
+    return (
+      <p key={ index }>{ t }</p>
+    )
+  })
 }
