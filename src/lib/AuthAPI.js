@@ -74,3 +74,23 @@ export const update_password_api = async (path, token, password) => {
   const response = await fetch(`${url}/auth${path}/pw`, param);
   return response;
 }
+
+// Password探すとき、メール確認
+export const forgot_password_email_check = async (email) => {
+  const param = { method: "POST",
+                  headers: { "Content-Type": "application/json;"},
+                  body: JSON.stringify({email: email, authNum: ""})
+                  };
+  const response = await fetch(`${url}/auth/forgot-password`, param);
+  return response;
+}
+
+// Password探すとき、認証番号確認
+export const forgot_password_authnum_check = async (email, authNum) => {
+  const param = { method: "POST",
+                  headers: { "Content-Type": "application/json;"},
+                  body: JSON.stringify({email: email, authNum: authNum})
+                  };
+  const response = await fetch(`${url}/auth/forgot-password/auth-number`, param);
+  return response;
+}

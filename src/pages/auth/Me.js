@@ -6,7 +6,7 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 
 import Drawer from '../../components/common/Drawer';
 
-import PasswordUpdate from './MePasswordUpdate';
+import PasswordUpdate from '../../components/auth/PasswordUpdate';
 import UserInfo from './MeUserInfo';
 
 const menuList = [

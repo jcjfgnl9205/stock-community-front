@@ -14,6 +14,7 @@ import { UserContext } from './context/UserContext';
 import Navbar from './components/common/Navbar';
 import Signup from './pages/auth/Signup';
 import Me from './pages/auth/Me';
+import FindPassword from './pages/auth/FindPassword';
 
 import Main from './pages/common/Main';
 import Notices from './pages/board/Notices';
@@ -44,6 +45,7 @@ function App() {
           <Route path="/" element={ <Main /> } />
           <Route path="/signup" element={ token ? <Navigate to="/" replace /> : <Signup /> } />
           <Route path={`/${user.username}`} element={ !token ? <Navigate to="/" replace /> : <Me /> } />
+          <Route path="forgot-password" element={ token ? <Navigate to="/" replace /> : <FindPassword /> } />
 
 
           <Route path="/notices" element={ <Notices /> } />

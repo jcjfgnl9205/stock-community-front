@@ -17,7 +17,7 @@ import { update_password_api } from '../../lib/AuthAPI';
 import * as Validation from '../../lib/Validation';
 import * as config from '../../config';
 
-const MePasswordUpdate = () => {
+const PasswordUpdate = () => {
 
   const path = useLocation(); // 現在path
   const { token, logout } = useContext(UserContext);
@@ -112,4 +112,4 @@ const MePasswordUpdate = () => {
   );
 }
   
-export default React.memo(MePasswordUpdate);
+export default React.memo(PasswordUpdate);

@@ -166,7 +166,7 @@ const LoginModal = (props) => {
               {/* Find Password, Sign Up Link */}
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">Forgot password?</Link>
+                  <Link href="/forgot-password" variant="body2">Forgot password?</Link>
                 </Grid>
                 <Grid item>
                   <Link href="/signup" variant="body2">Don't have an account? Sign Up</Link>
