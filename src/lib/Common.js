@@ -12,3 +12,13 @@ export const view_count_check = (page_id, setCookie, cookie) => {
   }
   return false;
 }
+
+
+const url = "http://localhost:8000";
+
+export const get_menus = async () => {
+    const param = { method: "GET",
+                    headers: { "Content-Type": "application/json;" }};
+    const response = await fetch(`${url}/menu`, param);
+    return response;
+}

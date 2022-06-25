@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from "react-router-dom";
 
 // Material-UI
 import PersonIcon from '@mui/icons-material/Person';
@@ -10,8 +11,8 @@ import PasswordUpdate from '../../components/auth/PasswordUpdate';
 import UserInfo from './MeUserInfo';
 
 const menuList = [
-  {'title': 'MyInfo', 'icon': <PersonIcon />},
-  {'title': 'PasswordUpdate', 'icon': <LockOpenIcon />}
+  {title: 'MyInfo', icon: <PersonIcon />},
+  {title: 'PasswordUpdate', icon: <LockOpenIcon />},
 ];
 
 
@@ -27,8 +28,12 @@ const getViewPage = (title) => {
 }
 
 const Me = () => {
+  let location = useLocation();
+  const [ currentPage, setCurrentPage ] = useState(location.pathname.split('/').at(-1));
 
-  const [ currentPage, setCurrentPage ] = useState(menuList[0].title)
+  useEffect(() => {
+    setCurrentPage(location.pathname.split('/').at(-1));
+  }, [location])
 
   return (
     <React.Fragment>

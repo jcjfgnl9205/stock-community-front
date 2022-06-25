@@ -24,7 +24,7 @@ import { UserContext } from '../../context/UserContext';
 // components
 import CommentDeleteConfirm from '../common/ConfirmModal';
 import CommentUpdateConfirm from '../common/UpdateModal';
-import Pagination from '../common/Pagination';
+import Pagination from '../common/Paginationc';
 
 // config, lib
 import * as Validation from '../../lib/Validation';

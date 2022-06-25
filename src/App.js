@@ -44,9 +44,11 @@ function App() {
         <Routes>
           <Route path="/" element={ <Main /> } />
           <Route path="/signup" element={ token ? <Navigate to="/" replace /> : <Signup /> } />
-          <Route path={`/${user.username}`} element={ !token ? <Navigate to="/" replace /> : <Me /> } />
+          <Route path={`/${user.username}/:str`} element={ !token ? <Navigate to="/" replace /> : <Me /> } />
           <Route path="forgot-password" element={ token ? <Navigate to="/" replace /> : <FindPassword /> } />
 
+          <Route path="/stock/:stockname" element={ <Notices /> } />
+          <Route path="/stock/:stockname/:id" element={<Notice />} />
 
           <Route path="/notices" element={ <Notices /> } />
           <Route path="/notices/:id" element={<Notice />} />
