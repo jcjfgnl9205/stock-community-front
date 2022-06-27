@@ -11,7 +11,7 @@ import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 
-import AddressErrorModal from '../../components/common/ConfirmModal';
+import AddressAlertModal from '../../components/modal/ConfirmModal';
 import AddressListModal from '../../components/common/ListModal';
 
 import { UserContext } from '../../context/UserContext';
@@ -48,7 +48,7 @@ const MeUserInfo = () => {
   const [ updateUser, setUpdateUser ] = useState(userinfo);
   const [ addressList, setAddressList ] = useState([]);
   const [ addressListModal, setAddressListModal ] = useState(false);
-  const [ addressErrorModal, setAddressErrorModal ] = useState(false);
+  const [ addressAlertModal, setAddressAlertModal ] = useState(false);
 
   // ListModalを閉じる
   const addressListModalClose = () => {
@@ -57,8 +57,8 @@ const MeUserInfo = () => {
   }
 
   // ErrorModalを閉じる
-  const addressErrorModalClose = () => {
-    setAddressErrorModal(false);
+  const addressAlertModalClose = () => {
+    setAddressAlertModal(false);
     setErrorMsg('');
   }
   
@@ -88,7 +88,7 @@ const MeUserInfo = () => {
       setErrorMsg('');
       const address = await addressApi(updateUser.zipcode);
       if (address.response.error) {
-        setAddressErrorModal(true);
+        setAddressAlertModal(true);
         return;
       }
 
@@ -243,10 +243,10 @@ const MeUserInfo = () => {
         addressOnClick={ addressOnClick }
       />
 
-      <AddressErrorModal
+      <AddressAlertModal
         title={ config.MSG951 }
-        open={ addressErrorModal }
-        handleClose={ addressErrorModalClose }
+        open={ addressAlertModal }
+        handleClose={ addressAlertModalClose }
       />
     </Container>
   );

@@ -1,43 +1,40 @@
-import React from 'react';
+// Material-UI
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
+import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 
 
-const ConfirmModal = (props) => {
-
+const ConfirmModal = ({ title, content, open, handleClose, btn }) => {
   return (
     <Dialog
-      open={props.open}
-      onClose={props.handleClose}
+      open={ open }
+      onClose={ handleClose }
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title" sx={{ minWidth: 440 }}>
-        { props.title }
+        { title }
       </DialogTitle>
+
       {
-        props.content
+        content
         ? <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              { props.content }
+              { content }
             </DialogContentText>
           </DialogContent>
         : null
       }
+
       <DialogActions>
-        <Button onClick={props.handleClose} color="inherit">CANCEL</Button>
-        {
-          props.onSubmit
-          ? <Button onClick={props.onSubmit.onSubmit} color={props.onSubmit.color}>{props.onSubmit.btnName}</Button>
-          : null
-        }
+        <Button onClick={ handleClose } color="error">CANCEL</Button>
+        <Button onClick={ btn.onSubmit } color={ btn.color ?? "primary" }>{ btn.name ?? "OK" }</Button>
       </DialogActions>
     </Dialog>
   );
 }
 
-export default React.memo(ConfirmModal);
+export default ConfirmModal;

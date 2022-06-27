@@ -6,7 +6,7 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
-import AddressErrorModal from '../../components/common/ConfirmModal';
+import AddressAlertModal from '../../components/modal/ConfirmModal';
 import AddressListModal from '../../components/common/ListModal';
 
 import * as Validation from '../../lib/Validation';
@@ -23,7 +23,7 @@ const AddressForm3 = (props) => {
   const [ errorMsg, setErrorMsg ] = useState('');
   const [ addressList, setAddressList ] = useState([]);
   const [ addressListModal, setAddressListModal ] = useState(false);
-  const [ addressErrorModal, setAddressErrorModal ] = useState(false);
+  const [ addressAlertModal, setAddressAlertModal ] = useState(false);
 
   // ListModalを閉じる
   const addressListModalClose = () => {
@@ -32,8 +32,8 @@ const AddressForm3 = (props) => {
   }
 
   // ErrorModalを閉じる
-  const addressErrorModalClose = () => {
-    setAddressErrorModal(false);
+  const addressAlertModalClose = () => {
+    setAddressAlertModal(false);
     setErrorMsg('');
   }
 
@@ -43,7 +43,7 @@ const AddressForm3 = (props) => {
       setErrorMsg('');
       const address = await AuthAPI.addressApi(props.user.zipcode);
       if (address.response.error) {
-        setAddressErrorModal(true);
+        setAddressAlertModal(true);
         return;
       }
 
@@ -143,10 +143,10 @@ const AddressForm3 = (props) => {
         addressOnClick={ addressOnClick }
       />
 
-      <AddressErrorModal
+      <AddressAlertModal
         title={ config.MSG951 }
-        open={ addressErrorModal }
-        handleClose={ addressErrorModalClose }
+        open={ addressAlertModal }
+        handleClose={ addressAlertModalClose }
       />
     </React.Fragment>
   );

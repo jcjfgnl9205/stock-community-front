@@ -12,7 +12,7 @@ import Sidebar from '../../components/board/Sidebar';
 import LikeHate from '../../components/board/LikeHate';
 import Comments from '../../components/board/Comments';
 import UpdateForm from '../../components/board/CreateForm';
-import DeleteConfirm from '../../components/common/ConfirmModal';
+import DeleteConfirm from '../../components/modal/ConfirmModal';
 
 import { UserContext } from '../../context/UserContext';
 import * as NoticeAPI from '../../lib/NoticeAPI';
@@ -197,13 +197,15 @@ const Notice = () => {
         </Grid>
       </main>
 
+      {/* 削除ボタン押下するとModalを表示する */}
       <DeleteConfirm
-        title="Are you sure you want to delete this post?"
+        title="掲示板を削除します。"
+        content="掲示板を削除しますと復元できません。"
         open={ deleteModal }
         handleClose={ deleteFormModalClose }
-        onSubmit={{
-          btnName: "DELETE",
-          color: "error",
+        btn={{
+          name: "DELETE",
+          color: "primary",
           onSubmit: onSubmitDelete
         }}
       />

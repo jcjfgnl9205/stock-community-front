@@ -22,7 +22,7 @@ import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined
 import { UserContext } from '../../context/UserContext';
 
 // components
-import CommentDeleteConfirm from '../common/ConfirmModal';
+import CommentDeleteConfirm from '../modal/ConfirmModal';
 import CommentUpdateConfirm from '../common/UpdateModal';
 import Pagination from '../common/Paginationc';
 
@@ -232,12 +232,12 @@ const Comments = (props) => {
       }
 
       <CommentDeleteConfirm
-        title="Are you sure you want to delete this comment?"
+        title="掲示板のコメントを削除します。"
         open={ deleteModal }
         handleClose={ () => setDeleteModal(false) }
-        onSubmit={{
-          btnName: "DELETE",
-          color: "error",
+        btn={{
+          name: "DELETE",
+          color: "primary",
           onSubmit: onSubmitCommentDelete
         }}
       />
