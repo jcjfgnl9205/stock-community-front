@@ -30,7 +30,7 @@ const AlertModal = ({ title, content, open, handleClose, btn }) => {
       }
 
       <DialogActions>
-        <Button onClick={ handleClose } color={ btn.color ?? "primary" } >{ btn.name ?? "OK" }</Button>
+        <Button onClick={ handleClose } color={ btn?.color ?? "primary" } >{ btn?.name ?? "OK" }</Button>
       </DialogActions>
     </Dialog>
   );

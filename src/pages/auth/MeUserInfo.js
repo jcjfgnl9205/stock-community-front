@@ -11,7 +11,7 @@ import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 
-import AddressAlertModal from '../../components/modal/ConfirmModal';
+import AddressAlertModal from '../../components/modal/AlertModal';
 import AddressListModal from '../../components/common/ListModal';
 
 import { UserContext } from '../../context/UserContext';
