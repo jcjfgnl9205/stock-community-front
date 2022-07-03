@@ -34,10 +34,10 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          aws s3 cp --region ap-northeast-1 ./react-build.zip s3://park-bucket-app/frontend/react-build.zip
+          aws s3 cp --region ap-northeast-1 ./react-build.zip s3://myapp-deploy/frontend/react-build.zip
       - name: Deploy # Deploy to EC2
         run: aws deploy create-deployment
-          --application-name app
+          --application-name park-stock
           --deployment-config-name CodeDeployDefault.AllAtOnce
-          --deployment-group-name app-group
-          --s3-location bucket=park-bucket-app,key=frontend/react-build.zip,bundleType=zip
+          --deployment-group-name dev
+          --s3-location bucket=myapp-deploy,key=frontend/react-build.zip,bundleType=zip
