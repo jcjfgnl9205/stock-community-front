@@ -3,10 +3,10 @@ os: linux
 
 files:
   - source: /
-    destination: /home/ubuntu/app/frontend
+    destination: /home/ec2-user/app/stock-community-frontend
     overwrite: yes
 permissions:
-  - object: /home/ubuntu/app/frontend
+  - object: /home/ec2-user/app/stock-community-frontend
     owner: root
     group: root
     mode: 755
