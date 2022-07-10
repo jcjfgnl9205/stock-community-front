@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 
 // Material-UI
+import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
-import AddressAlertModal from '../../components/modal/ConfirmModal';
+import AddressAlertModal from '../../components/modal/AlertModal';
 import AddressListModal from '../../components/common/ListModal';
 
 import * as Validation from '../../lib/Validation';
@@ -111,6 +112,9 @@ const AddressForm3 = (props) => {
           />
           <Button variant="outlined" color="secondary" onClick={ getAddress } >検索</Button>
         </Grid>
+        <Box sx={{ mx: 3 }}>
+          <Typography variant="caption" xs={{ mx: 2 }}>出典:「位置参照情報」(国土交通省)の加工情報・「HeartRails Geo API」(HeartRails Inc.)</Typography>
+        </Box>
         <Grid item xs={12} md={12}>
           <TextField
             type="text"
