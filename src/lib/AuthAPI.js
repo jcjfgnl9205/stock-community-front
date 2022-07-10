@@ -1,4 +1,4 @@
-const url = "http://localhost:8000";
+const url = process.env.REACT_APP_API_ROOT;
 
 // username重複チェック
 export const duplicate_id_check = async (path, username) => {

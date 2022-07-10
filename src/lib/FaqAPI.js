@@ -1,5 +1,5 @@
 
-const url = "http://localhost:8000";
+const url = process.env.REACT_APP_API_ROOT;
 
 // FAQ Create
 export const create_faq = async (path, token, faq) => {

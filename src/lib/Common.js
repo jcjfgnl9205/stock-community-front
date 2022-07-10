@@ -14,7 +14,7 @@ export const view_count_check = (page_id, setCookie, cookie) => {
 }
 
 
-const url = "http://localhost:8000";
+const url = process.env.REACT_APP_API_ROOT;
 
 export const get_menus = async () => {
     const param = { method: "GET",
