@@ -40,7 +40,7 @@ export const UserProvider = ({ children }) => {
                     headers: { "Content-Type": "application/json;" },
                     body: JSON.stringify({ username: user.username, password: user.password })
                     };
-    const response = await fetch("http://localhost:8000/auth/login", param);
+    const response = await fetch(`${process.env.REACT_APP_API_ROOT}/auth/login`, param);
     const data = await response.json();
     if (response.status === 200) {
       setToken(data.access_token);
@@ -65,7 +65,7 @@ export const UserProvider = ({ children }) => {
                     headers: { "Content-Type": "application/json;",
                                 Authorization: "Bearer " + token}
                     };
-    const response = await fetch("http://localhost:8000/auth/refresh_token", param);
+    const response = await fetch(`${process.env.REACT_APP_API_ROOT}/auth/refresh_token`, param);
     const data = await response.json();
     if (response.status === 200) {
       return data.access_token;
