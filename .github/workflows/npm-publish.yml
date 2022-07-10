@@ -8,6 +8,9 @@ on:
     branches:
       - main # main branchにpushする時、 CI/CDを行う
 
+env:
+  REACT_APP_API_ROOT: ${{secrets.REACT_APP_API_ROOT}}
+
 jobs: 
   build:
     runs-on: ubuntu-latest
