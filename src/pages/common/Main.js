@@ -5,8 +5,12 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 
+import LoadingPaper from '../../components/common/LoadingPaper';
+import ErrorPaper from '../../components/common/ErrorPaper';
 import DashBoardA from '../../components/common/MainDashBoardA';
-import MainList from '../../components/common/MainList';
+import ListTable from '../../components/common/ListTable';
+
+import useFetch from '../../hooks/useFetch';
 
 const stocks = [
   {key: 0, name: "KOSPI", price: "1111.45", daysRange: "1.50", daysRangePer: "-1.28%", flg: false},
@@ -28,19 +32,14 @@ const userStock = [
   {key: 2, name: "MicroSoft", price: "3333.45", daysRange: "-3.50", daysRangePer: "-3.28%", flg: true},
 ]
 
-const notice = [
-  {id: 54, title: "TITE1"},
-  {id: 2, title: "TITE2"},
-  {id: 3, title: "TITE3"},
-  {id: 4, title: "TITE4"}
-]
-
 const Main = () => {
 
   const [ stockDashBoard, setStockDashBoard ] = useState(stocks);
   const [ exchangeRateDashBoard, setExchangeRateDashBoard ] = useState(exchange);
   const [ userStockDashBoard, setUserStockDashBoard ] = useState(userStock);
-  const [ notices,  ] = useState(notice);
+  const { data: krStock, krStockLoading, krStockError } = useFetch(`${process.env.REACT_APP_API_ROOT}/stock/kr`);
+  const { data: jpStock, jpStockLoading, jpStockError } = useFetch(`${process.env.REACT_APP_API_ROOT}/stock/jp`);
+  const { data: notices, noticesLoading, noticesError } = useFetch(`${process.env.REACT_APP_API_ROOT}/notices`);
 
   const stockDashBoardOnClick = (key) => {
     setStockDashBoard((state) =>
@@ -102,22 +101,25 @@ const Main = () => {
                 />
               </Grid>
 
-              {/* Main News */}
-              <Grid item xs={12}>
-                <MainList
-                  title="お知らせ"
-                  path="/notices"
-                  data={ notices }
-                />
+              {/* お知らせリストテーブル */}
+              <Grid item xs={12} md={6} lf={6}>
+                {  noticesLoading && <LoadingPaper /> }
+                { !noticesLoading && noticesError && <ErrorPaper /> }
+                { !noticesLoading && notices && <ListTable title="お知らせ" path="/notices" data={ notices } /> }
               </Grid>
 
-              {/* Main Notice */}
-              <Grid item xs={12}>
-                <MainList
-                  title="株"
-                  path="/stock/kr"
-                  data={ notices }
-                />
+              {/* 株(日本)のリストテーブル */}
+              <Grid item xs={12} md={6} lf={6}>
+                {  jpStockLoading && <LoadingPaper /> }
+                { !jpStockLoading && jpStockError && <ErrorPaper /> }
+                { !jpStockLoading && jpStock && <ListTable title="掲示板(日本)" path="/stock/jp" data={ jpStock } /> }
+              </Grid>
+
+              {/* 株(韓国)のリストテーブル */}
+              <Grid item xs={12} md={6} lf={6}>
+                {  krStockLoading && <LoadingPaper /> }
+                { !krStockLoading && krStockError && <ErrorPaper /> }
+                { !krStockLoading && krStock && <ListTable title="掲示板(韓国)" path="/stock/kr" data={ krStock } /> }
               </Grid>
             </Grid>
           </Container>
